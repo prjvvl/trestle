@@ -15,4 +15,12 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { posts };
+const docs = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/docs" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+  }),
+});
+
+export const collections = { posts, docs };

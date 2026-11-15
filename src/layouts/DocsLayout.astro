@@ -1,0 +1,125 @@
+---
+import { ArrowLeft, ArrowRight, ChevronDown, SquarePen } from "@lucide/astro";
+import BaseLayout from "./BaseLayout.astro";
+import { withBase } from "../lib/url";
+import { siteConfig } from "../site.config";
+import type { Doc } from "../lib/docs";
+
+interface Props {
+  title: string;
+  description: string;
+  id: string;
+  sourcePath: string;
+  docs: Doc[];
+  prev?: { id: string; title: string };
+  next?: { id: string; title: string };
+}
+
+const { title, description, id, sourcePath, docs, prev, next } = Astro.props;
+const href = (docId: string) => withBase(`/docs/${docId}/`);
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="mx-auto flex max-w-6xl gap-10 px-4 lg:gap-12">
+    <aside class="hidden w-56 shrink-0 md:block">
+      <nav class="sticky top-16 flex max-h-[calc(100dvh-4rem)] flex-col gap-0.5 overflow-y-auto py-10 pr-2 text-sm" aria-label="Documentation">
+        <p class="px-3 font-display text-xs font-semibold tracking-wider text-fg uppercase">Guide</p>
+        <ul class="mt-2 flex flex-col gap-0.5">
+          {
+            docs.map((doc) => (
+              <li>
+                <a
+                  href={href(doc.id)}
+                  aria-current={doc.id === id ? "page" : undefined}
+                  class:list={[
+                    "block rounded-md px-3 py-1.5 leading-snug",
+                    doc.id === id ? "bg-brand/15 font-medium text-link" : "text-fg-muted hover:bg-surface hover:text-fg",
+                  ]}
+                >
+                  {doc.data.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </aside>
+
+    <article class="min-w-0 flex-1 py-10">
+      <details class="group mb-8 rounded-card border border-border bg-surface text-sm md:hidden">
+        <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 font-medium text-fg">
+          <span class="truncate">
+            <span class="text-fg-muted">Guide /</span> {title}
+          </span>
+          <ChevronDown class="size-4 shrink-0 text-fg-muted transition-transform group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <div class="flex flex-col gap-1 border-t border-border px-2 py-3">
+          {
+            docs.map((doc) => (
+              <a
+                href={href(doc.id)}
+                aria-current={doc.id === id ? "page" : undefined}
+                class:list={[
+                  "flex min-h-10 items-center rounded-md px-2",
+                  doc.id === id ? "bg-brand/15 font-medium text-link" : "text-fg-muted hover:text-fg",
+                ]}
+              >
+                {doc.data.title}
+              </a>
+            ))
+          }
+        </div>
+      </details>
+
+      <h1 class="text-2xl font-bold text-fg">{title}</h1>
+
+      <div class="prose mt-6 max-w-3xl">
+        <slot />
+      </div>
+
+      <footer class="mt-16 flex max-w-3xl flex-col gap-8">
+        <div class="grid gap-4 sm:grid-cols-2">
+          {
+            prev ? (
+              <a href={href(prev.id)} class="hover-elevate group/link rounded-card border border-border p-4">
+                <span class="flex items-center gap-1.5 text-xs text-fg-muted">
+                  <ArrowLeft class="size-3.5" aria-hidden="true" />
+                  Previous
+                </span>
+                <span class="mt-1 block font-medium text-fg group-hover/link:text-link">{prev.title}</span>
+              </a>
+            ) : (
+              <span class="hidden sm:block" />
+            )
+          }
+          {
+            next && (
+              <a href={href(next.id)} class="hover-elevate group/link rounded-card border border-border p-4 text-right">
+                <span class="flex items-center justify-end gap-1.5 text-xs text-fg-muted">
+                  Next
+                  <ArrowRight class="size-3.5" aria-hidden="true" />
+                </span>
+                <span class="mt-1 block font-medium text-fg group-hover/link:text-link">{next.title}</span>
+              </a>
+            )
+          }
+        </div>
+        <a
+          href={`${siteConfig.repo}/blob/main/${sourcePath}`}
+          class="inline-flex items-center gap-2 self-start text-sm text-fg-muted hover:text-fg"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <SquarePen class="size-4" aria-hidden="true" />
+          Edit this page on GitHub
+        </a>
+      </footer>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

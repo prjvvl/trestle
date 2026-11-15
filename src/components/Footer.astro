@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "../site.config";
+import GithubIcon from "./icons/Github.astro";
 
 const year = new Date().getFullYear();
 const socialLinks = Object.entries(siteConfig.social).filter(([, url]) => url);
@@ -18,12 +19,18 @@ const socialLinks = Object.entries(siteConfig.social).filter(([, url]) => url);
 
     {
       socialLinks.length > 0 && (
-        <div class="flex gap-4">
-          {socialLinks.map(([platform, url]) => (
-            <a href={url} class="text-sm text-fg-muted hover:text-fg" rel="me noopener noreferrer" target="_blank">
-              {platform}
-            </a>
-          ))}
+        <div class="flex items-center gap-4">
+          {socialLinks.map(([platform, url]) =>
+            platform === "github" ? (
+              <a href={url} class="text-fg-muted hover:text-fg" rel="me noopener noreferrer" target="_blank" aria-label="GitHub">
+                <GithubIcon class="size-5" />
+              </a>
+            ) : (
+              <a href={url} class="text-sm text-fg-muted hover:text-fg" rel="me noopener noreferrer" target="_blank">
+                {platform}
+              </a>
+            ),
+          )}
         </div>
       )
     }

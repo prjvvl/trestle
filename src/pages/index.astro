@@ -2,9 +2,11 @@
 import { FileText, Rocket, Puzzle } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
+import Terminal from "../components/Terminal.astro";
 import Button from "../components/Button.astro";
 import Card from "../components/Card.astro";
 import { siteConfig } from "../site.config";
+import { withBase } from "../lib/url";
 
 const features = [
   {
@@ -27,11 +29,24 @@ const features = [
 
 <BaseLayout title={siteConfig.name}>
   <Hero title={siteConfig.name} subtitle={siteConfig.description}>
-    <Button href="/blog">Read the blog</Button>
-    <Button href="/about" variant="secondary">About this site</Button>
+    <Button href={`${siteConfig.repo}/generate`}>Use this template</Button>
+    <Button href="/docs/quickstart" variant="secondary">Read the docs</Button>
+
+    <div slot="after" class="mx-auto mt-10 max-w-xl text-left">
+      <p class="mb-2 text-sm text-fg-muted">"Use this template" creates your own copy on GitHub. Then, locally:</p>
+      <Terminal title="sh">
+        <pre><code>git clone https://github.com/you/your-site.git
+cd your-site
+npm install
+npm run dev</code></pre>
+      </Terminal>
+      <p class="mt-3 text-sm text-fg-muted">
+        Adding this to a repo you already have instead? See <a href={withBase("/docs/quickstart")} class="underline underline-offset-2 hover:text-fg">Quickstart</a>.
+      </p>
+    </div>
   </Hero>
 
-  <section class="mx-auto max-w-5xl px-4 pb-20">
+  <section class="mx-auto max-w-5xl px-4 pb-20 pt-8">
     <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
       {
         features.map(({ icon: Icon, title, description }) => (

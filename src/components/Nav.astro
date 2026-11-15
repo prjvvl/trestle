@@ -3,6 +3,20 @@ import { Menu, X } from "@lucide/astro";
 import { siteConfig } from "../site.config";
 import { withBase } from "../lib/url";
 import ThemeToggle from "./ThemeToggle.astro";
+import GithubIcon from "./icons/Github.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const path = Astro.url.pathname.startsWith(base) ? Astro.url.pathname.slice(base.length) || "/" : Astro.url.pathname;
+const navItems = siteConfig.nav.map((item) => {
+  // A nav item can point at one leaf page (e.g. the first docs page) while
+  // still needing to read as "current" across a whole section — `match`
+  // overrides `href` for that comparison only.
+  const prefix = "match" in item ? item.match : item.href;
+  return {
+    ...item,
+    current: item.href === "/" ? path === "/" : path.startsWith(prefix),
+  };
+});
 ---
 
 <header
@@ -17,8 +31,12 @@ import ThemeToggle from "./ThemeToggle.astro";
 
     <nav class="hidden items-center gap-6 md:flex">
       {
-        siteConfig.nav.map((item) => (
-          <a href={withBase(item.href)} class="text-sm text-fg-muted hover:text-fg">
+        navItems.map((item) => (
+          <a
+            href={withBase(item.href)}
+            aria-current={item.current ? "page" : undefined}
+            class:list={["text-sm", item.current ? "font-medium text-fg" : "text-fg-muted hover:text-fg"]}
+          >
             {item.label}
           </a>
         ))
@@ -26,6 +44,15 @@ import ThemeToggle from "./ThemeToggle.astro";
     </nav>
 
     <div class="flex items-center gap-1">
+      <a
+        href={siteConfig.repo}
+        class="inline-flex min-h-11 min-w-11 items-center justify-center text-fg-muted hover:text-fg"
+        aria-label={`${siteConfig.name} on GitHub`}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <GithubIcon class="size-5" />
+      </a>
       <ThemeToggle />
 
       <button
@@ -53,10 +80,14 @@ import ThemeToggle from "./ThemeToggle.astro";
   >
     <div class="flex flex-col gap-1 border-t border-border px-4 py-3">
       {
-        siteConfig.nav.map((item) => (
+        navItems.map((item) => (
           <a
             href={withBase(item.href)}
-            class="flex min-h-11 items-center rounded px-2 text-sm text-fg-muted hover:bg-bg hover:text-fg"
+            aria-current={item.current ? "page" : undefined}
+            class:list={[
+              "flex min-h-11 items-center rounded px-2 text-sm",
+              item.current ? "font-medium text-fg" : "text-fg-muted hover:bg-bg hover:text-fg",
+            ]}
           >
             {item.label}
           </a>

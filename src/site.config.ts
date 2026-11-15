@@ -13,19 +13,28 @@ export const siteConfig = {
   domain: "",
 
   /** Fallback base URL used when `domain` is empty. Update the path to match your repo name. */
-  url: "https://your-username.github.io/trestle",
+  url: "https://prjvvl.github.io/trestle",
+
+  /** The canonical GitHub URL — used for "View on GitHub" and "Edit this page" links,
+   *  regardless of whether social.github is also set (that one can be hidden). */
+  repo: "https://github.com/prjvvl/trestle",
 
   social: {
-    github: "",
+    github: "https://github.com/prjvvl/trestle",
     twitter: "",
     linkedin: "",
   },
 
   nav: [
     { label: "Home", href: "/" },
+    { label: "Docs", href: "/docs/quickstart", match: "/docs" },
+    { label: "Components", href: "/components" },
     { label: "Blog", href: "/blog" },
     { label: "About", href: "/about" },
   ],
+
+  /** Sidebar order for src/content/docs/*.md, by filename (without .md). */
+  docs: ["quickstart", "configuration", "content", "deploying"],
 
   /** Off by default. Each is a self-contained fast-follow, not required for a working site. */
   features: {

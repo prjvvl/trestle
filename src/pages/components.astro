@@ -1,0 +1,140 @@
+---
+import { Sparkles } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Card from "../components/Card.astro";
+import Button from "../components/Button.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import Terminal from "../components/Terminal.astro";
+import GithubIcon from "../components/icons/Github.astro";
+import TagFilter from "../components/TagFilter";
+import { withBase } from "../lib/url";
+
+const demoPosts = [
+  { title: "Introducing Trestle", description: "Why this kit exists.", href: "#", tags: ["meta"] },
+  { title: "Why dark is the default", description: "The theme decision, and how to override it.", href: "#", tags: ["design"] },
+  { title: "Islands, not an SPA", description: "Where React fits into a mostly-static site.", href: "#", tags: ["astro"] },
+];
+
+const buttonSnippet = `<Button href="/docs/quickstart">Primary</Button>
+<Button href="/docs/quickstart" variant="secondary">Secondary</Button>
+<Button disabled>Disabled</Button>
+<Button loading>Loading</Button>`;
+
+const cardSnippet = `<Card title="Clickable" description="Has an href — renders as a bordered, hoverable link." href="/docs/quickstart" />
+<Card title="Informational" description="No href — renders as a plain block, no border." />`;
+
+const heroSnippet = `<Hero eyebrow="Optional status line" title="Your <span class='text-gradient'>title</span>" subtitle="Optional supporting line">
+  <Button href="/">Primary action</Button>
+  <div slot="after">Anything, e.g. an install snippet</div>
+</Hero>`;
+
+const themeToggleSnippet = `<ThemeToggle />`;
+
+const terminalSnippet = `<Terminal title="sh">
+  <pre><code>npm run dev</code></pre>
+</Terminal>`;
+
+const tagFilterSnippet = `<TagFilter client:load posts={posts} />`;
+---
+
+<BaseLayout title="Components">
+  <section class="mx-auto max-w-3xl px-4 py-16">
+    <h1 class="text-2xl font-bold text-fg">Components</h1>
+    <p class="mt-2 text-sm text-fg-muted">
+      Every page on this site, including this one, is built from these pieces. Reuse them instead
+      of writing one-off markup for a card grid or a CTA button — that's what keeps a site visually
+      consistent as it grows.
+    </p>
+
+    <h2 class="mt-12 text-lg font-semibold text-fg">Button</h2>
+    <p class="mt-2 text-sm text-fg-muted">
+      Renders a real <code>&lt;button&gt;</code> when no <code>href</code> is passed, so
+      <code>disabled</code>/<code>loading</code> work for form submits.
+    </p>
+    <div class="mt-4 flex flex-wrap items-center gap-3 rounded-card border border-border bg-surface p-6">
+      <Button href="/docs/quickstart">Primary</Button>
+      <Button href="/docs/quickstart" variant="secondary">Secondary</Button>
+      <Button disabled>Disabled</Button>
+      <Button loading>Loading</Button>
+    </div>
+    <pre class="code-surface mt-3 overflow-x-auto"><code>{buttonSnippet}</code></pre>
+
+    <h2 class="mt-12 text-lg font-semibold text-fg">Card</h2>
+    <p class="mt-2 text-sm text-fg-muted">
+      Only pass <code>href</code> when the card is genuinely clickable — an href-less card renders
+      as a plain informational block instead of a bordered box, so the two cases look different on
+      purpose.
+    </p>
+    <div class="mt-4 grid gap-4 rounded-card border border-border bg-surface p-6 sm:grid-cols-2">
+      <Card title="Clickable" description="Has an href — bordered, hoverable link." href="/docs/quickstart">
+        <Sparkles slot="icon" class="size-5 text-brand" aria-hidden="true" />
+      </Card>
+      <Card title="Informational" description="No href — plain block, no border." />
+    </div>
+    <pre class="code-surface mt-3 overflow-x-auto"><code>{cardSnippet}</code></pre>
+
+    <h2 class="mt-12 text-lg font-semibold text-fg">Hero</h2>
+    <p class="mt-2 text-sm text-fg-muted">
+      Used for the top of a page — see the homepage for a live example. Takes an optional
+      <code>eyebrow</code> status line, an HTML <code>title</code> (so a word can carry
+      <code>.text-gradient</code>), and a <code>slot="after"</code> for anything below the buttons.
+    </p>
+    <div class="mt-4 overflow-hidden rounded-card border border-border bg-surface">
+      <Hero title={`Example <span class="text-gradient">heading</span>`} subtitle="Optional supporting line goes here.">
+        <Button href="/docs/quickstart">Primary action</Button>
+      </Hero>
+    </div>
+    <pre class="code-surface mt-3 overflow-x-auto"><code>{heroSnippet}</code></pre>
+
+    <h2 class="mt-12 text-lg font-semibold text-fg">Terminal</h2>
+    <p class="mt-2 text-sm text-fg-muted">
+      A bordered, title-barred frame for CLI output or a code sample — used on the homepage for the
+      install and config snippets.
+    </p>
+    <div class="mt-4">
+      <Terminal title="sh">
+        <pre><code>npm run dev</code></pre>
+      </Terminal>
+    </div>
+    <pre class="code-surface mt-3 overflow-x-auto"><code>{terminalSnippet}</code></pre>
+
+    <h2 id="theme-toggle" class="mt-12 text-lg font-semibold text-fg">Theme toggle</h2>
+    <p class="mt-2 text-sm text-fg-muted">
+      Already live in the header of every page — shown again here for reference. Dark is the
+      default palette; this persists an explicit light/dark choice in <code>localStorage</code>.
+    </p>
+    <div class="mt-4 flex items-center gap-3 rounded-card border border-border bg-surface p-6">
+      <ThemeToggle />
+      <span class="text-sm text-fg-muted">Click to toggle — same control as the one in the nav.</span>
+    </div>
+    <pre class="code-surface mt-3 overflow-x-auto"><code>{themeToggleSnippet}</code></pre>
+
+    <h2 class="mt-12 text-lg font-semibold text-fg">Tag filter</h2>
+    <p class="mt-2 text-sm text-fg-muted">
+      A React island — the only part of this section that ships JavaScript. Used on the
+      <a href={withBase("/blog")} class="underline underline-offset-2 hover:text-fg">blog page</a> with real posts; these three are sample data.
+    </p>
+    <div class="mt-4 rounded-card border border-border bg-surface p-6">
+      <TagFilter client:load posts={demoPosts} />
+    </div>
+    <pre class="code-surface mt-3 overflow-x-auto"><code>{tagFilterSnippet}</code></pre>
+
+    <h2 class="mt-12 text-lg font-semibold text-fg">GitHub icon</h2>
+    <p class="mt-2 text-sm text-fg-muted">
+      Lucide dropped brand logos, so the GitHub mark is a small inline-SVG component
+      (<code>icons/Github.astro</code>) instead. Used in the header's "View on GitHub" link and the
+      footer's social link.
+    </p>
+    <div class="mt-4 flex items-center gap-3 rounded-card border border-border bg-surface p-6 text-fg-muted">
+      <GithubIcon class="size-5" />
+      <span class="text-sm">{"<GithubIcon class=\"size-5\" />"}</span>
+    </div>
+
+    <h2 class="mt-12 text-lg font-semibold text-fg">Nav &amp; Footer</h2>
+    <p class="mt-2 text-sm text-fg-muted">
+      Structural chrome, not meant to be embedded standalone — you're already looking at both:
+      <code>Nav.astro</code> at the top of this page, <code>Footer.astro</code> at the bottom.
+    </p>
+  </section>
+</BaseLayout>

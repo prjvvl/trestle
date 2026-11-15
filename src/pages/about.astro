@@ -1,15 +1,41 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { siteConfig } from "../site.config";
+import { withBase } from "../lib/url";
 ---
 
 <BaseLayout title="About">
   <section class="mx-auto max-w-3xl px-4 py-16">
     <h1 class="text-2xl font-bold text-fg">About {siteConfig.name}</h1>
+
     <p class="mt-4 text-fg-muted">
-      This is an example page. Edit <code>src/pages/about.astro</code> directly, or replace this
-      section with content pulled from a Markdown collection if you'd rather manage it the same
-      way as blog posts.
+      {siteConfig.name} is a GitHub Pages site-building kit — a template repository that pre-wires
+      the parts of shipping a static site that get rebuilt from scratch every time: deploy, a
+      custom domain, SEO basics, a consistent design system, and Markdown-based content.
+    </p>
+
+    <p class="mt-4 text-fg-muted">
+      Static site generators and themes are a solved problem. The gap is the GitHub-native glue
+      around them — a deploy workflow that actually works, a CNAME that survives a rebuild, meta
+      tags that are correct by default — which otherwise gets re-wired by hand on every new site.
+      Trestle bundles that glue once, so creating your own copy of the repo and pushing gets a
+      real, live, decent-looking site in minutes.
+    </p>
+
+    <h2 class="mt-10 text-lg font-semibold text-fg">The stack</h2>
+    <p class="mt-4 text-fg-muted">
+      Built on <a href="https://astro.build" class="underline underline-offset-2 hover:text-fg" rel="noopener noreferrer" target="_blank">Astro</a>'s
+      islands architecture, so any npm UI library can be dropped in per-component without paying
+      for a full client-side framework, with <a href="https://tailwindcss.com" class="underline underline-offset-2 hover:text-fg" rel="noopener noreferrer" target="_blank">Tailwind CSS v4</a> for
+      CSS-first design tokens and Astro's Content Layer API for schema-validated Markdown content.
+    </p>
+
+    <h2 class="mt-10 text-lg font-semibold text-fg">This site</h2>
+    <p class="mt-4 text-fg-muted">
+      What you're looking at right now is Trestle running on its own template — not a separate
+      marketing page built on top of it. See the <a href={withBase("/components")} class="underline underline-offset-2 hover:text-fg">Components</a> page
+      for the pieces it ships with, and <a href={withBase("/docs/quickstart")} class="underline underline-offset-2 hover:text-fg">Docs</a> for
+      how to configure and deploy a site of your own.
     </p>
   </section>
 </BaseLayout>

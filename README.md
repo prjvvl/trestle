@@ -1,20 +1,42 @@
 # Trestle
 
-A GitHub Pages site-building kit. Clone it, edit one config file, push — you
-get a live, custom-domain, SEO-ready site with a consistent design system and
-Markdown-based content, without spending a day wiring up the deploy pipeline,
-domain, and SEO basics yourself.
+A GitHub Pages site-building kit. Use it as a template, edit one config file,
+push — you get a live, custom-domain, SEO-ready site with a consistent design
+system and Markdown-based content, without spending a day wiring up the
+deploy pipeline, domain, and SEO basics yourself.
 
 Built on [Astro](https://astro.build) with React islands and Tailwind CSS v4.
 
 ## Quickstart
 
+**A dedicated repo for the site** — click **Use this template → Create a new
+repository** on this repo's GitHub page, then clone *your* new repository:
+
 ```bash
+git clone https://github.com/you/your-site.git
+cd your-site
 npm install
 npm run dev
 ```
 
-Open `http://localhost:4321`.
+**Adding it into a repo you already have** — "Use this template" always
+creates a new top-level repo, so for a site that lives alongside an existing
+project instead, pull Trestle's files into a subfolder with
+[tiged](https://github.com/tiged/tiged) (no git history, no new repo):
+
+```bash
+cd your-existing-repo
+npx tiged prjvvl/trestle site
+cd site
+npm install
+npm run dev
+```
+
+`.github/workflows/ci.yml` and `deploy.yml` assume the Astro project is at
+the repo root — in a subfolder, add `working-directory: ./site` to their
+build steps and point `upload-pages-artifact`'s `path` at `site/dist`.
+
+Either way, open `http://localhost:4321`. Then:
 
 1. Edit `src/site.config.ts` — name, description, domain, social links,
    navigation.

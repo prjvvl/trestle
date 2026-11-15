@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import TagFilter from "../../components/TagFilter";
 import { withBase } from "../../lib/url";
 import { isPublished } from "../../lib/posts";
+import { Rss } from "@lucide/astro";
 
 const posts = (await getCollection("posts", isPublished))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -17,7 +18,12 @@ const posts = (await getCollection("posts", isPublished))
 
 <BaseLayout title="Blog">
   <section class="mx-auto max-w-3xl px-4 py-16">
-    <h1 class="text-2xl font-bold text-fg">Blog</h1>
+    <div class="flex items-center justify-between gap-4">
+      <h1 class="text-2xl font-bold text-fg">Blog</h1>
+      <a href={withBase("/rss.xml")} class="inline-flex items-center gap-1.5 text-sm text-fg-muted hover:text-fg">
+        <Rss class="size-4" aria-hidden="true" /> RSS
+      </a>
+    </div>
     <p class="mt-2 text-sm text-fg-muted">
       Filtering below is a live React island. Try clicking a tag with JavaScript devtools open
       and notice nothing else on the page re-renders.
